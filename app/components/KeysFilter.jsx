@@ -1,12 +1,14 @@
 import React, {PropTypes} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import Radium from 'radium'
 import {setKeyFilter} from '../actions'
 
+@Radium
 class KeysFilter extends React.Component {
   render() {
     return (
-      <form>
+      <form style={[styles.form]}>
         <input
           disabled={this.props.isFetchingKeys}
           ref="filter"
@@ -22,6 +24,12 @@ class KeysFilter extends React.Component {
 KeysFilter.propTypes = {
   isFetchingKeys: PropTypes.bool.isRequired,
   filter: PropTypes.string
+}
+
+const styles = {
+  form: {
+    margin: '0px'
+  }
 }
 
 const mapStateToProps = (state) => {

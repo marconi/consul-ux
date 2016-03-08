@@ -1,10 +1,16 @@
 import React, {PropTypes} from 'react'
 import Radium from 'radium'
-import ConsulKeySegment from './ConsulKeySegment'
+import KeySegment from './KeySegment'
 import AddNewKey from './AddNewKey'
 
 @Radium
-class ConsulKey extends React.Component {
+class Key extends React.Component {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.addKeyForm.newlyAddedIndex === this.props.index) {
+      this._fadeOutKey()
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const hasCanShowMenuChanged = nextProps.addKeyForm.isSubmitting !== this.props.addKeyForm.isSubmitting
     const isMatchingParentKey = nextProps.addKeyForm.parentKeyIndex === this.props.index
@@ -14,7 +20,7 @@ class ConsulKey extends React.Component {
 
   handleAddNewKey(keyIndex, segmentIndex) {
     let prefix = ''
-    if (segmentIndex > 0) {
+    if (segmentIndex !== null) {
       prefix = this._getSegments().splice(0, segmentIndex + 1).join('/')
     }
     this.props.onShowAddKeyForm(keyIndex, prefix)
@@ -24,9 +30,9 @@ class ConsulKey extends React.Component {
     const keySegments = this._getSegments()
     const isShowForm = this.props.addKeyForm.parentKeyIndex === this.props.index
     return (
-      <div style={[styles.consulKey]}>
+      <div ref="key" style={[styles.consulKey]}>
         {keySegments.map((segment, i) => {
-          return <ConsulKeySegment
+          return <KeySegment
                   key={i}
                   segment={segment}
                   canShowMenu={!this.props.addKeyForm.isSubmitting}
@@ -48,16 +54,33 @@ class ConsulKey extends React.Component {
   _getSegments() {
     return this.props.consulKey.split('/').filter((segment) => segment.trim() !== '')
   }
+
+  _fadeOutKey() {
+    const fadeEffect = setInterval(() => {
+      if (!this.refs.key.style.opacity) {
+        this.refs.key.style.opacity = 1
+      }
+      if (this.refs.key.style.opacity < 0.1) {
+        this.refs.key.style.opacity = 1
+        clearInterval(fadeEffect)
+        this.props.onClearNewlyAddedKey()
+      } else {
+        this.refs.key.style.opacity -= 0.1
+      }
+    }, 40)
+  }
 }
 
-ConsulKey.propTypes = {
+Key.propTypes = {
   index: PropTypes.number.isRequired,
   consulKey: PropTypes.string.isRequired,
   addKeyForm: PropTypes.object.isRequired,
+  newlyAddedIndex: PropTypes.number,
   onShowAddKeyForm: PropTypes.func.isRequired,
   onCancelAddKeyForm: PropTypes.func.isRequired,
   onSetNewKeyValue: PropTypes.func.isRequired,
-  onSubmitNewKey: PropTypes.func.isRequired
+  onSubmitNewKey: PropTypes.func.isRequired,
+  onClearNewlyAddedKey: PropTypes.func.isRequired
 }
 
 const styles = {
@@ -66,4 +89,4 @@ const styles = {
   }
 }
 
-export default ConsulKey
+export default Key

@@ -1,11 +1,11 @@
 import React from 'react'
 import KeysFilter from './KeysFilter'
-import ConsulKeys from './ConsulKeys'
+import Keys from './Keys'
 
 const App = () => (
   <div>
     <KeysFilter />
-    <ConsulKeys />
+    <Keys />
   </div>
 )
 

@@ -4,7 +4,7 @@ import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 
 @Radium
-class ConsulKeySegment extends React.Component {
+class KeySegment extends React.Component {
   render() {
     const tooltipButtons = (
       <span>
@@ -48,7 +48,7 @@ class ConsulKeySegment extends React.Component {
   }
 }
 
-ConsulKeySegment.propTypes = {
+KeySegment.propTypes = {
   segment: PropTypes.string.isRequired,
   canShowMenu: PropTypes.bool.isRequired,
   isFirstSegment: PropTypes.bool.isRequired,
@@ -101,4 +101,4 @@ const styles = {
   }
 }
 
-export default ConsulKeySegment
+export default KeySegment

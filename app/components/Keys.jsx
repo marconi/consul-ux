@@ -7,11 +7,13 @@ import {
   showAddKeyForm,
   cancelAddKeyForm,
   setNewKeyValue,
-  submitNewKey
+  submitNewKey,
+  clearNewlyAddedKey
 } from '../actions'
-import ConsulKey from './ConsulKey'
+import Key from './Key'
 
-class ConsulKeys extends React.Component {
+@Radium
+class Keys extends React.Component {
   componentDidMount() {
     this.props.actions.fetchKeys()
   }
@@ -28,9 +30,15 @@ class ConsulKeys extends React.Component {
     const hasValidFilter = this._isFilterValid(this.props.filter)
     return (
       <div>
+        {this.props.isFetchingKeys &&
+          <p>Fetching keys, please wait...</p>}
+
+        {this.props.fetchError &&
+          <p style={[styles.error]}>{this.props.fetchError}</p>}
+
         {this.props.keys.map((key, i) => {
           if (!hasValidFilter || hasValidFilter && key.indexOf(this.props.filter) !== -1) {
-            return <ConsulKey
+            return <Key
                     key={i}
                     index={i}
                     consulKey={key}
@@ -38,12 +46,10 @@ class ConsulKeys extends React.Component {
                     onShowAddKeyForm={this.props.actions.showAddKeyForm}
                     onCancelAddKeyForm={this.props.actions.cancelAddKeyForm}
                     onSetNewKeyValue={this.props.actions.setNewKeyValue}
-                    onSubmitNewKey={this.props.actions.submitNewKey} />
+                    onSubmitNewKey={this.props.actions.submitNewKey}
+                    onClearNewlyAddedKey={this.props.actions.clearNewlyAddedKey} />
           }
         })}
-
-        {this.props.isFetchingKeys &&
-          <p>Fetching keys, please wait...</p>}
       </div>
     )
   }
@@ -53,12 +59,18 @@ class ConsulKeys extends React.Component {
   }
 }
 
-ConsulKeys.propTypes = {
+Keys.propTypes = {
   isFetchingKeys: PropTypes.bool.isRequired,
   filter: PropTypes.string,
   keys: PropTypes.arrayOf(PropTypes.string),
   addKeyForm: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
+}
+
+const styles = {
+  error: {
+    color: '#CC181E'
+  }
 }
 
 const mapStateToProps = (state) => {
@@ -75,9 +87,10 @@ const mapDispatchToProps = (dispatch) => {
       showAddKeyForm,
       cancelAddKeyForm,
       setNewKeyValue,
-      submitNewKey
+      submitNewKey,
+      clearNewlyAddedKey
     }, dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConsulKeys)
+export default connect(mapStateToProps, mapDispatchToProps)(Keys)

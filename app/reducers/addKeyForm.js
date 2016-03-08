@@ -2,7 +2,9 @@ import {
   SHOW_ADD_KEY_FORM,
   CANCEL_ADD_KEY_FORM,
   SET_NEW_KEY_VALUE,
-  SUBMIT_NEW_KEY_STARTED
+  SUBMIT_NEW_KEY_STARTED,
+  SUBMIT_NEW_KEY_FINISHED,
+  CLEAR_NEWLY_ADDED_KEY
 } from '../actions'
 
 const initialState = {
@@ -10,7 +12,9 @@ const initialState = {
   parentKeyIndex: null,
   keyPrefix: null,
   newKey: null,
-  newValue: null
+  newValue: null,
+  addError: null,
+  newlyAddedIndex: null
 }
 
 const addKeyForm = (state = initialState, action) => {
@@ -25,7 +29,8 @@ const addKeyForm = (state = initialState, action) => {
         parentKeyIndex: null,
         keyPrefix: null,
         newKey: null,
-        newValue: null
+        newValue: null,
+        addError: null
       })
     case SET_NEW_KEY_VALUE:
       return Object.assign({}, state, {
@@ -34,6 +39,18 @@ const addKeyForm = (state = initialState, action) => {
       })
     case SUBMIT_NEW_KEY_STARTED:
       return Object.assign({}, state, {isSubmitting: true})
+    case SUBMIT_NEW_KEY_FINISHED:
+      return Object.assign({}, state, {
+        isSubmitting: false,
+        addError: action.error,
+        parentKeyIndex: null,
+        keyPrefix: null,
+        newKey: null,
+        newValue: null,
+        newlyAddedIndex: action.newlyAddedIndex
+      })
+    case CLEAR_NEWLY_ADDED_KEY:
+      return Object.assign({}, state, {newlyAddedKey: null})
     default:
       return state
   }
