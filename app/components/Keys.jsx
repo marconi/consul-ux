@@ -8,7 +8,8 @@ import {
   cancelAddKeyForm,
   setNewKeyValue,
   submitNewKey,
-  clearNewlyAddedKey
+  clearNewlyAddedKeyIndex,
+  deleteKey
 } from '../actions'
 import Key from './Key'
 
@@ -43,11 +44,13 @@ class Keys extends React.Component {
                     index={i}
                     consulKey={key}
                     addKeyForm={this.props.addKeyForm}
+                    deletedKey={this.props.deletedKey}
                     onShowAddKeyForm={this.props.actions.showAddKeyForm}
                     onCancelAddKeyForm={this.props.actions.cancelAddKeyForm}
                     onSetNewKeyValue={this.props.actions.setNewKeyValue}
                     onSubmitNewKey={this.props.actions.submitNewKey}
-                    onClearNewlyAddedKey={this.props.actions.clearNewlyAddedKey} />
+                    clearNewlyAddedKeyIndex={this.props.actions.clearNewlyAddedKeyIndex}
+                    onDeleteKey={this.props.actions.deleteKey} />
           }
         })}
       </div>
@@ -88,7 +91,8 @@ const mapDispatchToProps = (dispatch) => {
       cancelAddKeyForm,
       setNewKeyValue,
       submitNewKey,
-      clearNewlyAddedKey
+      clearNewlyAddedKeyIndex,
+      deleteKey
     }, dispatch)
   }
 }

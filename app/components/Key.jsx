@@ -12,10 +12,11 @@ class Key extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    const isParentKeyDeleted = nextProps.deletedKey && this.props.consulKey.substr(0, nextProps.deletedKey.length) === nextProps.deletedKey
     const hasCanShowMenuChanged = nextProps.addKeyForm.isSubmitting !== this.props.addKeyForm.isSubmitting
     const isMatchingParentKey = nextProps.addKeyForm.parentKeyIndex === this.props.index
     const isMatchingActiveParentKey = this.props.addKeyForm.parentKeyIndex === nextProps.index
-    return hasCanShowMenuChanged || (isMatchingParentKey || isMatchingActiveParentKey)
+    return isParentKeyDeleted || hasCanShowMenuChanged || (isMatchingParentKey || isMatchingActiveParentKey)
   }
 
   handleAddNewKey(keyIndex, segmentIndex) {
@@ -32,13 +33,15 @@ class Key extends React.Component {
     return (
       <div ref="key" style={[styles.consulKey]}>
         {keySegments.map((segment, i) => {
+          const fullKey = keySegments.slice(0, i + 1).join('/')
           return <KeySegment
                   key={i}
                   segment={segment}
                   canShowMenu={!this.props.addKeyForm.isSubmitting}
                   isFirstSegment={i === 0}
                   isLastSegment={i === keySegments.length - 1}
-                  onAddNewKey={() => this.handleAddNewKey(this.props.index, i)} />
+                  onAddNewKey={() => this.handleAddNewKey(this.props.index, i)}
+                  onDeleteKey={() => this.props.onDeleteKey(fullKey)} />
         })}
 
         {isShowForm &&
@@ -63,7 +66,7 @@ class Key extends React.Component {
       if (this.refs.key.style.opacity < 0.1) {
         this.refs.key.style.opacity = 1
         clearInterval(fadeEffect)
-        this.props.onClearNewlyAddedKey()
+        this.props.clearNewlyAddedKeyIndex()
       } else {
         this.refs.key.style.opacity -= 0.1
       }
@@ -80,7 +83,8 @@ Key.propTypes = {
   onCancelAddKeyForm: PropTypes.func.isRequired,
   onSetNewKeyValue: PropTypes.func.isRequired,
   onSubmitNewKey: PropTypes.func.isRequired,
-  onClearNewlyAddedKey: PropTypes.func.isRequired
+  clearNewlyAddedKeyIndex: PropTypes.func.isRequired,
+  onDeleteKey: PropTypes.func.isRequired
 }
 
 const styles = {

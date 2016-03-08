@@ -4,7 +4,7 @@ import {
   SET_NEW_KEY_VALUE,
   SUBMIT_NEW_KEY_STARTED,
   SUBMIT_NEW_KEY_FINISHED,
-  CLEAR_NEWLY_ADDED_KEY
+  CLEAR_NEWLY_ADDED_KEY_INDEX
 } from '../actions'
 
 const initialState = {
@@ -49,8 +49,8 @@ const addKeyForm = (state = initialState, action) => {
         newValue: null,
         newlyAddedIndex: action.newlyAddedIndex
       })
-    case CLEAR_NEWLY_ADDED_KEY:
-      return Object.assign({}, state, {newlyAddedKey: null})
+    case CLEAR_NEWLY_ADDED_KEY_INDEX:
+      return Object.assign({}, state, {newlyAddedIndex: null})
     default:
       return state
   }

@@ -18,7 +18,8 @@ class KeySegment extends React.Component {
           style={[
             styles.tooltipButton,
             styles.tooltipButtonMinus
-          ]}>-</button>
+          ]}
+          onClick={this.props.onDeleteKey}>-</button>
       </span>
     )
 

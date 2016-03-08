@@ -16,12 +16,15 @@ export const SET_NEW_KEY_VALUE = 'SET_NEW_KEY_VALUE'
 export const SUBMIT_NEW_KEY = 'SUBMIT_NEW_KEY'
 export const SUBMIT_NEW_KEY_STARTED = 'SUBMIT_NEW_KEY_STARTED'
 export const SUBMIT_NEW_KEY_FINISHED = 'SUBMIT_NEW_KEY_FINISHED'
-export const CLEAR_NEWLY_ADDED_KEY = 'CLEAR_NEWLY_ADDED_KEY'
+export const CLEAR_NEWLY_ADDED_KEY_INDEX = 'CLEAR_NEWLY_ADDED_KEY_INDEX'
+
+export const DELETE_KEY_STARTED = 'DELETE_KEY_STARTED'
+export const DELETE_KEY_FINISHED = 'DELETE_KEY_FINISHED'
 
 // --------------------------------------------------------------------------------
 
-export const fetchKeysStarted = {type: FETCH_KEYS_STARTED}
-export const fetchKeysFinished = (error, data = []) => {
+const fetchKeysStarted = {type: FETCH_KEYS_STARTED}
+const fetchKeysFinished = (error, data = []) => {
   return {
     type: FETCH_KEYS_FINISHED,
     error: (error) ? `Error: ${error}` : error,
@@ -39,7 +42,7 @@ export const fetchKeys = () => {
         if (resp instanceof Error) {
           dispatch(fetchKeysFinished(resp.message))
         } else {
-          dispatch(fetchKeysFinished(resp.data, resp.message))
+          dispatch(fetchKeysFinished(resp.data))
         }
       })
   }
@@ -64,11 +67,11 @@ export const setNewKeyValue = (newKey, newValue) => {
   }
 }
 
-export const submitNewKeyStarted = {type: SUBMIT_NEW_KEY_STARTED}
-export const submitNewKeyFinished = (error, parentKeyIndex = null, newKey = null) => {
+const submitNewKeyStarted = {type: SUBMIT_NEW_KEY_STARTED}
+const submitNewKeyFinished = (error, parentKeyIndex = null, newKey = null) => {
   return {
     type: SUBMIT_NEW_KEY_FINISHED,
-    error: error,
+    error: (error) ? `Error: ${error}` : error,
     parentKeyIndex: parentKeyIndex,
     newKey: newKey,
     newlyAddedIndex: parentKeyIndex + 1
@@ -85,9 +88,36 @@ export const submitNewKey = (parentKeyIndex, newKey, newValue) => {
         if (resp instanceof Error) {
           dispatch(submitNewKeyFinished(resp.message))
         } else {
-          dispatch(submitNewKeyFinished(resp.data, resp.message))
+          dispatch(submitNewKeyFinished(resp.data))
         }
       })
   }
 }
-export const clearNewlyAddedKey = () => ({type: CLEAR_NEWLY_ADDED_KEY})
+export const clearNewlyAddedKeyIndex = () => ({type: CLEAR_NEWLY_ADDED_KEY_INDEX})
+
+// --------------------------------------------------------------------------------
+
+const deleteKeyStarted = {type: DELETE_KEY_STARTED}
+const deleteKeyFinished = (error, key) => {
+  return {
+    type: DELETE_KEY_FINISHED,
+    error: (error) ? `Error: ${error}` : error,
+    key: key
+  }
+}
+export const deleteKey = (key) => {
+  return (dispatch) => {
+    dispatch(deleteKeyStarted)
+    return axios.delete(`${CONSUL_BASE_URL}/kv/${key}?token=${CONSUL_TOKEN}&recurse`)
+      .then((resp) => {
+        dispatch(deleteKeyFinished(null, key))
+      })
+      .catch((resp) => {
+        if (resp instanceof Error) {
+          dispatch(deleteKeyFinished(resp.message, key))
+        } else {
+          dispatch(deleteKeyFinished(resp.data, key))
+        }
+      })
+  }
+}
