@@ -12,15 +12,16 @@ export const SET_NEW_KEY_VALUE = 'SET_NEW_KEY_VALUE'
 export const SUBMIT_NEW_KEY = 'SUBMIT_NEW_KEY'
 export const SUBMIT_NEW_KEY_STARTED = 'SUBMIT_NEW_KEY_STARTED'
 
+// --------------------------------------------------------------------------------
+
 export const fetchKeysStarted = {type: FETCH_KEYS_STARTED}
-export const fetchKeysFinished = (status, data=[]) => {
+export const fetchKeysFinished = (status, data = []) => {
   return {
     type: FETCH_KEYS_FINISHED,
     status: status,
     data: data
   }
 }
-
 export const fetchKeys = () => {
   return (dispatch) => {
     dispatch(fetchKeysStarted)
@@ -34,8 +35,10 @@ export const fetchKeys = () => {
       })
   }
 }
-
 export const setKeyFilter = (filter) => ({type: SET_KEY_FILTER, filter: filter})
+
+// --------------------------------------------------------------------------------
+
 export const showAddKeyForm = (parentKeyIndex, keyPrefix) => {
   return {
     type: SHOW_ADD_KEY_FORM,
@@ -51,7 +54,6 @@ export const setNewKeyValue = (newKey, newValue) => {
     newValue: newValue
   }
 }
-
 export const submitNewKeyStarted = {type: SUBMIT_NEW_KEY_STARTED}
 export const submitNewKey = () => {
   return (dispatch) => {

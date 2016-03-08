@@ -63,7 +63,7 @@ ConsulKeys.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    ...state.consul,
+    ...state.keys,
     addKeyForm: state.addKeyForm
   }
 }

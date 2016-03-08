@@ -19,13 +19,22 @@ class KeysFilter extends React.Component {
   }
 }
 
+KeysFilter.propTypes = {
+  isFetchingKeys: PropTypes.bool.isRequired,
+  filter: PropTypes.string
+}
+
 const mapStateToProps = (state) => {
   return {
-    isFetchingKeys: state.consul.isFetchingKeys,
-    filter: state.consul.filter,
+    isFetchingKeys: state.keys.isFetchingKeys,
+    filter: state.keys.filter,
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({actions: bindActionCreators({setKeyFilter}, dispatch)})
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators({setKeyFilter}, dispatch)
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(KeysFilter)

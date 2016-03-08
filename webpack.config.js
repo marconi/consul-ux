@@ -13,21 +13,21 @@ var PATHS = {
 };
 
 module.exports = {
-	entry: [
+  entry: [
     PATHS.app
   ],
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
   module: {
-  	loaders: [
+    loaders: [
       {test: /\.css$/, loaders: ['style', 'css'], includes: [PATHS.app]},
-  		{test: /\.js|\.jsx/, exclude: /node_modules/, loader: 'babel-loader'}
-  	]
+      {test: /\.js|\.jsx/, exclude: /node_modules/, loader: 'babel-loader'}
+    ]
   },
   output: {
-  	filename: "bundle.js",
-  	path: PATHS.dist
+    filename: "bundle.js",
+    path: PATHS.dist
   },
   devServer: {
     hot: true,
