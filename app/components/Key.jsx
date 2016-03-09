@@ -29,7 +29,7 @@ class Key extends React.Component {
 
   render() {
     const keySegments = this._getSegments()
-    const isShowForm = this.props.addKeyForm.parentKeyIndex === this.props.index
+    const isShowForm = this.props.addKeyForm.isShown && this.props.addKeyForm.parentKeyIndex === this.props.index
     return (
       <div ref="key" style={[styles.consulKey]}>
         {keySegments.map((segment, i) => {

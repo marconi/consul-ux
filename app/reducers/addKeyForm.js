@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   isSubmitting: false,
+  isShown: false,
   parentKeyIndex: null,
   keyPrefix: null,
   newKey: null,
@@ -21,11 +22,13 @@ const addKeyForm = (state = initialState, action) => {
   switch (action.type) {
     case SHOW_ADD_KEY_FORM:
       return Object.assign({}, state, {
+        isShown: true,
         parentKeyIndex: action.parentKeyIndex,
         keyPrefix: action.keyPrefix
       })
     case CANCEL_ADD_KEY_FORM:
       return Object.assign({}, state, {
+        isShown: false,
         parentKeyIndex: null,
         keyPrefix: null,
         newKey: null,
@@ -41,6 +44,7 @@ const addKeyForm = (state = initialState, action) => {
       return Object.assign({}, state, {isSubmitting: true})
     case SUBMIT_NEW_KEY_FINISHED:
       return Object.assign({}, state, {
+        isShown: false,
         isSubmitting: false,
         addError: action.error,
         parentKeyIndex: null,

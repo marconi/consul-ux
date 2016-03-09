@@ -3,9 +3,8 @@ import Radium from 'radium'
 
 @Radium
 class AddNewKey extends React.Component {
-
   componentDidMount() {
-      this.refs.key.focus()  
+    this.refs.key.focus()  
   }
 
   handleKeyChange(e) {
@@ -15,7 +14,7 @@ class AddNewKey extends React.Component {
 
   handleSubmit() {
     const newKey = (this.props.newKey[0] === '/') ? this.props.newKey.substr(1) : this.props.newKey
-    const fullKey = `${this.props.keyPrefix}/${newKey}`
+    const fullKey = (this.props.keyPrefix) ? `${this.props.keyPrefix}/${newKey}` : `${newKey}`
     this.props.onSubmit(this.props.parentKeyIndex, fullKey, this.props.newValue)
   }
 
@@ -91,8 +90,8 @@ class AddNewKey extends React.Component {
 AddNewKey.propTypes = {
   addError: PropTypes.string,
   isSubmitting: PropTypes.bool.isRequired,
-  parentKeyIndex: PropTypes.number.isRequired,
-  keyPrefix: PropTypes.string.isRequired,
+  parentKeyIndex: PropTypes.number,
+  keyPrefix: PropTypes.string,
   newKey: PropTypes.string,
   newValue: PropTypes.string,
   onSetNew: PropTypes.func.isRequired,
@@ -109,7 +108,8 @@ const styles = {
     border: 'none'
   },
   tdActions: {
-    paddingTop: '10px 0px 0px 0px'
+    paddingTop: '10px 0px 0px 0px',
+    border: 'none'
   },
   tdPrefix: {
     width: '20px'

@@ -54,7 +54,8 @@ KeySegment.propTypes = {
   canShowMenu: PropTypes.bool.isRequired,
   isFirstSegment: PropTypes.bool.isRequired,
   isLastSegment: PropTypes.bool.isRequired,
-  onAddNewKey: PropTypes.func.isRequired
+  onAddNewKey: PropTypes.func.isRequired,
+  onDeleteKey: PropTypes.func.isRequired
 }
 
 const styles = {

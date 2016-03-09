@@ -12,6 +12,7 @@ import {
   deleteKey
 } from '../actions'
 import Key from './Key'
+import AddNewKey from './AddNewKey'
 
 @Radium
 class Keys extends React.Component {
@@ -36,6 +37,13 @@ class Keys extends React.Component {
 
         {this.props.fetchError &&
           <p style={[styles.error]}>{this.props.fetchError}</p>}
+
+        {this.props.addKeyForm.isShown && this.props.addKeyForm.parentKeyIndex === null &&
+          <AddNewKey
+            {...this.props.addKeyForm}
+            onCancel={this.props.actions.cancelAddKeyForm}
+            onSetNew={this.props.actions.setNewKeyValue}
+            onSubmit={this.props.actions.submitNewKey} />}
 
         {this.props.keys.map((key, i) => {
           if (!hasValidFilter || hasValidFilter && key.indexOf(this.props.filter) !== -1) {

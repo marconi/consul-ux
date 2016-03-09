@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // const CONSUL_BASE_URL = 'http://192.168.99.100:8501/v1'
-const CONSUL_BASE_URL = 'http://127.0.0.1:8500/v1'
+const CONSUL_BASE_URL = 'http://127.0.0.1:8502/v1'
 const CONSUL_TOKEN = 'admin'
 
 export const FETCH_KEYS = 'FETCH_KEYS'
@@ -74,7 +74,7 @@ const submitNewKeyFinished = (error, parentKeyIndex = null, newKey = null) => {
     error: (error) ? `Error: ${error}` : error,
     parentKeyIndex: parentKeyIndex,
     newKey: newKey,
-    newlyAddedIndex: parentKeyIndex + 1
+    newlyAddedIndex: (parentKeyIndex) ? parentKeyIndex + 1 : parentKeyIndex
   }
 }
 export const submitNewKey = (parentKeyIndex, newKey, newValue) => {
