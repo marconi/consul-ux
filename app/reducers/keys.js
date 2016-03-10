@@ -36,13 +36,18 @@ const keys = (state = initialState, action) => {
   case SUBMIT_NEW_KEY_FINISHED:
     const keyExists = state.keys.indexOf(action.newKey) !== -1
     if (!action.error && !keyExists) {
-      return Object.assign({}, state, {
-        keys: [
+      let keys = []
+      if (action.parentKeyIndex !==  null) {
+        kets = [
           ...state.keys.slice(0, action.parentKeyIndex + 1),
           action.newKey,
           ...state.keys.slice(action.parentKeyIndex + 1)
         ]
-      })
+      } else {
+        keys = [...state.keys, action.newKey]
+        keys.sort()
+      }
+      return Object.assign({}, state, {keys: keys})
     }
   case DELETE_KEY_STARTED:
     return Object.assign({}, state, {

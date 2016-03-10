@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import Radium from 'radium'
 
 @Radium
-class AddNewKey extends React.Component {
+class AddKeyForm extends React.Component {
   componentDidMount() {
     this.refs.key.focus()  
   }
@@ -20,8 +20,8 @@ class AddNewKey extends React.Component {
 
   render() {
     return (
-      <form style={[styles.addNewKeyForm]}>
-        <table>
+      <form style={[styles.form]}>
+        <table style={[styles.table]}>
           <tbody>
 
             {this.props.addError && 
@@ -67,7 +67,7 @@ class AddNewKey extends React.Component {
                   type="button"
                   className="button"
                   onClick={this.handleSubmit.bind(this)}>
-                  {this.props.isSubmitting ? 'Please wait...' : 'Submit'}
+                  {this.props.isSubmitting ? 'Please wait...' : 'Create'}
                 </button>&nbsp;
                 <button
                   disabled={this.props.isSubmitting}
@@ -87,7 +87,7 @@ class AddNewKey extends React.Component {
   }
 }
 
-AddNewKey.propTypes = {
+AddKeyForm.propTypes = {
   addError: PropTypes.string,
   isSubmitting: PropTypes.bool.isRequired,
   parentKeyIndex: PropTypes.number,
@@ -114,8 +114,11 @@ const styles = {
   tdPrefix: {
     width: '20px'
   },
-  addNewKeyForm: {
-    margin: '20px 0px'
+  form: {
+    margin: '20px 0px 0px 0px'
+  },
+  table: {
+    margin: '0px'
   },
   addKeyPrefix: {
     backgroundColor: '#eee',
@@ -142,4 +145,4 @@ const styles = {
   }
 }
 
-export default AddNewKey
+export default AddKeyForm

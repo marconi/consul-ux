@@ -1,10 +1,19 @@
 import React, {PropTypes} from 'react'
 import Radium from 'radium'
 import KeySegment from './KeySegment'
-import AddNewKey from './AddNewKey'
+import AddKeyForm from './AddKeyForm'
+import UpdateKeyForm from './UpdateKeyForm'
 
 @Radium
 class Key extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isShowAddForm: false,
+      isShowUpdateForm: false
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.addKeyForm.newlyAddedIndex === this.props.index) {
       this._fadeOutKey()
@@ -13,10 +22,18 @@ class Key extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const isParentKeyDeleted = nextProps.deletedKey && this.props.consulKey.substr(0, nextProps.deletedKey.length) === nextProps.deletedKey
-    const hasCanShowMenuChanged = nextProps.addKeyForm.isSubmitting !== this.props.addKeyForm.isSubmitting
+    const canShowPopupMenu = nextProps.addKeyForm.isSubmitting !== this.props.addKeyForm.isSubmitting
     const isMatchingParentKey = nextProps.addKeyForm.parentKeyIndex === this.props.index
     const isMatchingActiveParentKey = this.props.addKeyForm.parentKeyIndex === nextProps.index
-    return isParentKeyDeleted || hasCanShowMenuChanged || (isMatchingParentKey || isMatchingActiveParentKey)
+    const toggleUpdateForm = this._isShowUpdateForm(nextProps) || !this._isShowUpdateForm(nextProps) && this.state.isShowUpdateForm
+    return toggleUpdateForm || isParentKeyDeleted || canShowPopupMenu || (isMatchingParentKey || isMatchingActiveParentKey)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      isShowUpdateForm: this._isShowUpdateForm(nextProps),
+      isShowAddForm: this._isShowAddForm(nextProps)
+    })
   }
 
   handleAddNewKey(keyIndex, segmentIndex) {
@@ -29,7 +46,6 @@ class Key extends React.Component {
 
   render() {
     const keySegments = this._getSegments()
-    const isShowForm = this.props.addKeyForm.isShown && this.props.addKeyForm.parentKeyIndex === this.props.index
     return (
       <div ref="key" style={[styles.consulKey]}>
         {keySegments.map((segment, i) => {
@@ -41,15 +57,23 @@ class Key extends React.Component {
                   isFirstSegment={i === 0}
                   isLastSegment={i === keySegments.length - 1}
                   onAddNewKey={() => this.handleAddNewKey(this.props.index, i)}
-                  onDeleteKey={() => this.props.onDeleteKey(fullKey)} />
+                  onDeleteKey={() => this.props.onDeleteKey(fullKey)}
+                  onUpdateKey={() => this.props.onShowUpdateKeyForm(this.props.index, this.props.consulKey, this.props.consulValue)} />
         })}
 
-        {isShowForm &&
-          <AddNewKey
+        {this.state.isShowAddForm &&
+          <AddKeyForm
             {...this.props.addKeyForm}
             onCancel={this.props.onCancelAddKeyForm}
             onSetNew={this.props.onSetNewKeyValue}
             onSubmit={this.props.onSubmitNewKey} />}
+
+        {this.state.isShowUpdateForm &&
+          <UpdateKeyForm
+            {...this.props.updateKeyForm}
+            onCancel={this.props.onCancelUpdateKeyForm}
+            onUpdateValue={this.props.onUpdateValue}
+            onSubmit={this.props.onSubmitUpdate} />}
       </div>
     )
   }
@@ -72,11 +96,20 @@ class Key extends React.Component {
       }
     }, 40)
   }
+
+  _isShowAddForm(props) {
+    return props.addKeyForm.isShown && props.addKeyForm.parentKeyIndex === this.props.index
+  }
+
+  _isShowUpdateForm(props) {
+    return props.updateKeyForm.isShown && props.updateKeyForm.updateKeyIndex === this.props.index 
+  }
 }
 
 Key.propTypes = {
   index: PropTypes.number.isRequired,
   consulKey: PropTypes.string.isRequired,
+  consulValue: PropTypes.string,
   addKeyForm: PropTypes.object.isRequired,
   newlyAddedIndex: PropTypes.number,
   onShowAddKeyForm: PropTypes.func.isRequired,
@@ -84,7 +117,8 @@ Key.propTypes = {
   onSetNewKeyValue: PropTypes.func.isRequired,
   onSubmitNewKey: PropTypes.func.isRequired,
   clearNewlyAddedKeyIndex: PropTypes.func.isRequired,
-  onDeleteKey: PropTypes.func.isRequired
+  onDeleteKey: PropTypes.func.isRequired,
+  onShowUpdateKeyForm: PropTypes.func.isRequired
 }
 
 const styles = {

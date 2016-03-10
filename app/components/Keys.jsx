@@ -9,10 +9,14 @@ import {
   setNewKeyValue,
   submitNewKey,
   clearNewlyAddedKeyIndex,
-  deleteKey
+  deleteKey,
+  showUpdateKeyForm,
+  cancelUpdateKeyForm,
+  updateValue,
+  submitUpdate
 } from '../actions'
 import Key from './Key'
-import AddNewKey from './AddNewKey'
+import AddKeyForm from './AddKeyForm'
 
 @Radium
 class Keys extends React.Component {
@@ -39,7 +43,7 @@ class Keys extends React.Component {
           <p style={[styles.error]}>{this.props.fetchError}</p>}
 
         {this.props.addKeyForm.isShown && this.props.addKeyForm.parentKeyIndex === null &&
-          <AddNewKey
+          <AddKeyForm
             {...this.props.addKeyForm}
             onCancel={this.props.actions.cancelAddKeyForm}
             onSetNew={this.props.actions.setNewKeyValue}
@@ -51,14 +55,22 @@ class Keys extends React.Component {
                     key={i}
                     index={i}
                     consulKey={key}
+                    consulValue="value goes here"
                     addKeyForm={this.props.addKeyForm}
+                    updateKeyForm={this.props.updateKeyForm}
                     deletedKey={this.props.deletedKey}
+
                     onShowAddKeyForm={this.props.actions.showAddKeyForm}
                     onCancelAddKeyForm={this.props.actions.cancelAddKeyForm}
                     onSetNewKeyValue={this.props.actions.setNewKeyValue}
                     onSubmitNewKey={this.props.actions.submitNewKey}
                     clearNewlyAddedKeyIndex={this.props.actions.clearNewlyAddedKeyIndex}
-                    onDeleteKey={this.props.actions.deleteKey} />
+                    onDeleteKey={this.props.actions.deleteKey}
+
+                    onShowUpdateKeyForm={this.props.actions.showUpdateKeyForm}
+                    onCancelUpdateKeyForm={this.props.actions.cancelUpdateKeyForm}
+                    onUpdateValue={this.props.actions.updateValue}
+                    onSubmitUpdate={this.props.actions.submitUpdate} />
           }
         })}
       </div>
@@ -75,6 +87,7 @@ Keys.propTypes = {
   filter: PropTypes.string,
   keys: PropTypes.arrayOf(PropTypes.string),
   addKeyForm: PropTypes.object.isRequired,
+  updateKeyForm: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 }
 
@@ -87,7 +100,8 @@ const styles = {
 const mapStateToProps = (state) => {
   return {
     ...state.keys,
-    addKeyForm: state.addKeyForm
+    addKeyForm: state.addKeyForm,
+    updateKeyForm: state.updateKeyForm
   }
 }
 
@@ -100,7 +114,11 @@ const mapDispatchToProps = (dispatch) => {
       setNewKeyValue,
       submitNewKey,
       clearNewlyAddedKeyIndex,
-      deleteKey
+      deleteKey,
+      showUpdateKeyForm,
+      cancelUpdateKeyForm,
+      updateValue,
+      submitUpdate
     }, dispatch)
   }
 }

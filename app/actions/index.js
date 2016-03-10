@@ -21,6 +21,9 @@ export const CLEAR_NEWLY_ADDED_KEY_INDEX = 'CLEAR_NEWLY_ADDED_KEY_INDEX'
 export const DELETE_KEY_STARTED = 'DELETE_KEY_STARTED'
 export const DELETE_KEY_FINISHED = 'DELETE_KEY_FINISHED'
 
+export const SHOW_UPDATE_KEY_FORM = 'SHOW_UPDATE_KEY_FORM'
+export const CANCEL_UPDATE_KEY_FORM = 'CANCEL_UPDATE_KEY_FORM'
+
 // --------------------------------------------------------------------------------
 
 const fetchKeysStarted = {type: FETCH_KEYS_STARTED}
@@ -121,3 +124,13 @@ export const deleteKey = (key) => {
       })
   }
 }
+
+export const showUpdateKeyForm = (index, key, value) => {
+  return {
+    type: SHOW_UPDATE_KEY_FORM,
+    key: key,
+    value: value,
+    index: index
+  }
+}
+export const cancelUpdateKeyForm = () => ({type: CANCEL_UPDATE_KEY_FORM})

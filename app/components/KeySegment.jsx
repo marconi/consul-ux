@@ -31,7 +31,10 @@ class KeySegment extends React.Component {
           (this.props.isFirstSegment ? styles.consulKeySegmentFirst : null),
           (this.props.isLastSegment ? styles.consulKeySegmentLast : null)
         ]}
-        onClick={(e) => e.preventDefault()}>{this.props.segment}</a>
+        onClick={(e) => {
+          e.preventDefault()
+          this.props.onUpdateKey()
+        }}>{this.props.segment}</a>
     )
 
     return (
@@ -55,7 +58,8 @@ KeySegment.propTypes = {
   isFirstSegment: PropTypes.bool.isRequired,
   isLastSegment: PropTypes.bool.isRequired,
   onAddNewKey: PropTypes.func.isRequired,
-  onDeleteKey: PropTypes.func.isRequired
+  onDeleteKey: PropTypes.func.isRequired,
+  onUpdateKey: PropTypes.func.isRequired
 }
 
 const styles = {
