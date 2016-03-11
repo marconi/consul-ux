@@ -21,8 +21,14 @@ export const CLEAR_NEWLY_ADDED_KEY_INDEX = 'CLEAR_NEWLY_ADDED_KEY_INDEX'
 export const DELETE_KEY_STARTED = 'DELETE_KEY_STARTED'
 export const DELETE_KEY_FINISHED = 'DELETE_KEY_FINISHED'
 
-export const SHOW_UPDATE_KEY_FORM = 'SHOW_UPDATE_KEY_FORM'
 export const CANCEL_UPDATE_KEY_FORM = 'CANCEL_UPDATE_KEY_FORM'
+export const GET_VALUE_STARTED = 'GET_VALUE_STARTED'
+export const GET_VALUE_FINISHED = 'GET_VALUE_FINISHED'
+export const UPDATE_VALUE = 'UPDATE_VALUE'
+
+export const SUBMIT_UPDATED_VALUE = 'SUBMIT_UPDATED_VALUE'
+export const SUBMIT_UPDATED_VALUE_STARTED = 'SUBMIT_UPDATED_VALUE_STARTED'
+export const SUBMIT_UPDATED_VALUE_FINISHED = 'SUBMIT_UPDATED_VALUE_FINISHED'
 
 // --------------------------------------------------------------------------------
 
@@ -77,7 +83,7 @@ const submitNewKeyFinished = (error, parentKeyIndex = null, newKey = null) => {
     error: (error) ? `Error: ${error}` : error,
     parentKeyIndex: parentKeyIndex,
     newKey: newKey,
-    newlyAddedIndex: (parentKeyIndex) ? parentKeyIndex + 1 : parentKeyIndex
+    newlyAddedIndex: (parentKeyIndex !== null) ? parentKeyIndex + 1 : parentKeyIndex
   }
 }
 export const submitNewKey = (parentKeyIndex, newKey, newValue) => {
@@ -125,12 +131,62 @@ export const deleteKey = (key) => {
   }
 }
 
-export const showUpdateKeyForm = (index, key, value) => {
+// --------------------------------------------------------------------------------
+
+const getValueStarted = (index, key, segmentIndex) => {
   return {
-    type: SHOW_UPDATE_KEY_FORM,
+    type: GET_VALUE_STARTED,
+    index: index,
     key: key,
-    value: value,
-    index: index
+    segmentIndex: segmentIndex
   }
 }
+const getValueFinished = (error, value = null) => {
+  return {
+    type: GET_VALUE_FINISHED,
+    error: (error) ? `Error: ${error}` : error,
+    value: value
+  }
+}
+export const showUpdateKeyForm = (index, key, segmentIndex) => {
+  return (dispatch) => {
+    dispatch(getValueStarted(index, key, segmentIndex))
+    return axios.get(`${CONSUL_BASE_URL}/kv/${key}?token=${CONSUL_TOKEN}&raw`)
+      .then((resp) => {
+        dispatch(getValueFinished(null, resp.data))
+      })
+      .catch((resp) => {
+        if (resp instanceof Error) {
+          dispatch(getValueFinished(resp.message))
+        } else {
+          dispatch(getValueFinished(resp.data))
+        }
+      })
+  }
+}
+export const updateValue = (value) => ({type: UPDATE_VALUE, value: value})
 export const cancelUpdateKeyForm = () => ({type: CANCEL_UPDATE_KEY_FORM})
+
+const submitUpdatedValueStarted = {type: SUBMIT_UPDATED_VALUE_STARTED}
+const submitUpdatedValueFinished = (error) => {
+  return {
+    type: SUBMIT_UPDATED_VALUE_FINISHED,
+    error: (error) ? `Error: ${error}` : error
+  }
+}
+export const submitUpdatedValue = (key, value) => {
+  return (dispatch) => {
+    dispatch(submitUpdatedValueStarted)
+    return axios.put(`${CONSUL_BASE_URL}/kv/${key}?token=${CONSUL_TOKEN}`, value)
+      .then((resp) => {
+        dispatch(submitUpdatedValueFinished(null))
+      })
+      .catch((resp) => {
+        if (resp instanceof Error) {
+          dispatch(submitUpdatedValueFinished(resp.message))
+        } else {
+          dispatch(submitUpdatedValueFinished(resp.data))
+        }
+      })
+  }
+}

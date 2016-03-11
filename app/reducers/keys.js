@@ -38,7 +38,7 @@ const keys = (state = initialState, action) => {
     if (!action.error && !keyExists) {
       let keys = []
       if (action.parentKeyIndex !==  null) {
-        kets = [
+        keys = [
           ...state.keys.slice(0, action.parentKeyIndex + 1),
           action.newKey,
           ...state.keys.slice(action.parentKeyIndex + 1)

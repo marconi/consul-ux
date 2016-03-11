@@ -3,6 +3,10 @@ import Radium from 'radium'
 
 @Radium
 class UpdateKeyForm extends React.Component {
+  componentDidMount() {
+    this.refs.value.focus()
+  }
+
   render() {
     return (
       <form style={[styles.form]}>
@@ -21,17 +25,19 @@ class UpdateKeyForm extends React.Component {
                 <span style={[styles.key]}>{this.props.updateKey}</span>
               </td>
             </tr>
-            <tr>
-              <td style={[styles.td]} colSpan="2">
-                <textarea
-                  disabled={this.props.isSubmitting}
-                  ref="value"
-                  style={[styles.valueTextarea]}
-                  placeholder="Value..."
-                  value={this.props.updateValue}
-                  onChange={(e) => this.props.onUpdateValue(e.target.value)}></textarea>
-              </td>
-            </tr>
+
+            {!this._isKeyFolder() &&
+              <tr>
+                <td style={[styles.td]} colSpan="2">
+                  <textarea
+                    disabled={this.props.isSubmitting}
+                    ref="value"
+                    style={[styles.valueTextarea]}
+                    placeholder="Value..."
+                    value={this.props.updateValue}
+                    onChange={(e) => this.props.onUpdateValue(e.target.value)}></textarea>
+                </td>
+              </tr>}
 
             <tr>
               <td style={[styles.tdActions]} colSpan="2">
@@ -39,7 +45,7 @@ class UpdateKeyForm extends React.Component {
                   disabled={this.props.isSubmitting}
                   type="button"
                   className="button"
-                  onClick={() => this.props.onSubmit(this.props.value)}>
+                  onClick={() => this.props.onSubmit(this.props.updateKey, this.props.updateValue)}>
                   {this.props.isSubmitting ? 'Please wait...' : 'Update'}
                 </button>&nbsp;
                 <button
@@ -53,6 +59,10 @@ class UpdateKeyForm extends React.Component {
         </table>
       </form>
     )
+  }
+
+  _isKeyFolder() {
+    return this.props.updateKey[this.props.updateKey.length - 1] === '/'
   }
 }
 

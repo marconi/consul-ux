@@ -29,17 +29,18 @@ class KeySegment extends React.Component {
         style={[
           styles.consulKeySegment,
           (this.props.isFirstSegment ? styles.consulKeySegmentFirst : null),
-          (this.props.isLastSegment ? styles.consulKeySegmentLast : null)
+          (this.props.isLastSegment ? styles.consulKeySegmentLast : null),
+          (this.props.isGettingValue ? styles.wait : null)
         ]}
         onClick={(e) => {
           e.preventDefault()
-          this.props.onUpdateKey()
-        }}>{this.props.segment}</a>
+          if (!this.props.isGettingValue && !this._isSubmitting()) this.props.onUpdateKey()
+        }}>{(this.props.isGettingValue) ? 'please wait...' : this.props.segment}</a>
     )
 
     return (
       <span>
-        {this.props.canShowMenu ?
+        {!this._isSubmitting() ?
           <Tooltip
             placement="top"
             align={{offset: [0, 3]}}
@@ -50,11 +51,16 @@ class KeySegment extends React.Component {
       </span>
     )
   }
+
+  _isSubmitting() {
+    return this.props.isAdding || this.props.isUpdating
+  }
 }
 
 KeySegment.propTypes = {
   segment: PropTypes.string.isRequired,
-  canShowMenu: PropTypes.bool.isRequired,
+  isAdding: PropTypes.bool.isRequired,
+  isUpdating: PropTypes.bool.isRequired,
   isFirstSegment: PropTypes.bool.isRequired,
   isLastSegment: PropTypes.bool.isRequired,
   onAddNewKey: PropTypes.func.isRequired,
@@ -104,6 +110,9 @@ const styles = {
     borderBottomLeftRadius: '0px',
     borderTopRightRadius: '3px',
     borderBottomRightRadius: '3px'
+  },
+  wait: {
+    backgroundColor: '#FF851B'
   }
 }
 

@@ -14,7 +14,7 @@ class Key extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidMount() {
     if (this.props.addKeyForm.newlyAddedIndex === this.props.index) {
       this._fadeOutKey()
     }
@@ -22,11 +22,16 @@ class Key extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const isParentKeyDeleted = nextProps.deletedKey && this.props.consulKey.substr(0, nextProps.deletedKey.length) === nextProps.deletedKey
-    const canShowPopupMenu = nextProps.addKeyForm.isSubmitting !== this.props.addKeyForm.isSubmitting
+
+    const isAddSubmitting = nextProps.addKeyForm.isSubmitting !== this.props.addKeyForm.isSubmitting
+    const isUpdateSubmitting = nextProps.updateKeyForm.isSubmitting !== this.props.updateKeyForm.isSubmitting
+    const canShowPopupMenu = isAddSubmitting || isUpdateSubmitting
+
     const isMatchingParentKey = nextProps.addKeyForm.parentKeyIndex === this.props.index
     const isMatchingActiveParentKey = this.props.addKeyForm.parentKeyIndex === nextProps.index
     const toggleUpdateForm = this._isShowUpdateForm(nextProps) || !this._isShowUpdateForm(nextProps) && this.state.isShowUpdateForm
-    return toggleUpdateForm || isParentKeyDeleted || canShowPopupMenu || (isMatchingParentKey || isMatchingActiveParentKey)
+    const isGettingKeyValue = this._isGettingKeyValue(nextProps)
+    return isGettingKeyValue || toggleUpdateForm || isParentKeyDeleted || canShowPopupMenu || (isMatchingParentKey || isMatchingActiveParentKey)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,12 +58,14 @@ class Key extends React.Component {
           return <KeySegment
                   key={i}
                   segment={segment}
-                  canShowMenu={!this.props.addKeyForm.isSubmitting}
+                  isGettingValue={this._isGettingSegmentValue(i)}
+                  isAdding={this.props.addKeyForm.isSubmitting}
+                  isUpdating={this.props.updateKeyForm.isSubmitting}
                   isFirstSegment={i === 0}
                   isLastSegment={i === keySegments.length - 1}
                   onAddNewKey={() => this.handleAddNewKey(this.props.index, i)}
                   onDeleteKey={() => this.props.onDeleteKey(fullKey)}
-                  onUpdateKey={() => this.props.onShowUpdateKeyForm(this.props.index, this.props.consulKey, this.props.consulValue)} />
+                  onUpdateKey={() => this.props.onShowUpdateKeyForm(this.props.index, fullKey, i)} />
         })}
 
         {this.state.isShowAddForm &&
@@ -103,6 +110,16 @@ class Key extends React.Component {
 
   _isShowUpdateForm(props) {
     return props.updateKeyForm.isShown && props.updateKeyForm.updateKeyIndex === this.props.index 
+  }
+
+  _isGettingKeyValue(props) {
+    return props.updateKeyForm.updateKeyIndex === this.props.index
+  }
+
+  _isGettingSegmentValue(segmentIndex) {
+    const isMatchingKeyIndex = this._isGettingKeyValue(this.props)
+    const isMatchingSegmentIndex = this.props.updateKeyForm.updateKeySegmentIndex === segmentIndex
+    return this.props.updateKeyForm.isGettingValue && isMatchingKeyIndex && isMatchingSegmentIndex
   }
 }
 

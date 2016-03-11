@@ -13,7 +13,7 @@ import {
   showUpdateKeyForm,
   cancelUpdateKeyForm,
   updateValue,
-  submitUpdate
+  submitUpdatedValue
 } from '../actions'
 import Key from './Key'
 import AddKeyForm from './AddKeyForm'
@@ -24,13 +24,13 @@ class Keys extends React.Component {
     this.props.actions.fetchKeys()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this._isFilterValid(nextProps.filter)) {
-      setTimeout(() => this.forceUpdate(), 500)
-      return false
-    }
-    return true
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (this._isFilterValid(nextProps.filter)) {
+  //     setTimeout(() => this.forceUpdate(), 500)
+  //     return false
+  //   }
+  //   return true
+  // }
 
   render() {
     const hasValidFilter = this._isFilterValid(this.props.filter)
@@ -48,6 +48,9 @@ class Keys extends React.Component {
             onCancel={this.props.actions.cancelAddKeyForm}
             onSetNew={this.props.actions.setNewKeyValue}
             onSubmit={this.props.actions.submitNewKey} />}
+
+        {!this.props.isFetchingKeys && this.props.keys.length === 0 &&
+          <p>No keys found.</p>}
 
         {this.props.keys.map((key, i) => {
           if (!hasValidFilter || hasValidFilter && key.indexOf(this.props.filter) !== -1) {
@@ -70,7 +73,7 @@ class Keys extends React.Component {
                     onShowUpdateKeyForm={this.props.actions.showUpdateKeyForm}
                     onCancelUpdateKeyForm={this.props.actions.cancelUpdateKeyForm}
                     onUpdateValue={this.props.actions.updateValue}
-                    onSubmitUpdate={this.props.actions.submitUpdate} />
+                    onSubmitUpdate={this.props.actions.submitUpdatedValue} />
           }
         })}
       </div>
@@ -118,7 +121,7 @@ const mapDispatchToProps = (dispatch) => {
       showUpdateKeyForm,
       cancelUpdateKeyForm,
       updateValue,
-      submitUpdate
+      submitUpdatedValue
     }, dispatch)
   }
 }
