@@ -1,9 +1,5 @@
 import axios from 'axios'
 
-// const CONSUL_BASE_URL = 'http://192.168.99.100:8501/v1'
-const CONSUL_BASE_URL = 'http://127.0.0.1:8502/v1'
-const CONSUL_TOKEN = 'admin'
-
 export const FETCH_KEYS = 'FETCH_KEYS'
 export const FETCH_KEYS_STARTED = 'FETCH_KEYS_STARTED'
 export const FETCH_KEYS_FINISHED = 'FETCH_KEYS_FINISHED'
@@ -30,6 +26,10 @@ export const SUBMIT_UPDATED_VALUE = 'SUBMIT_UPDATED_VALUE'
 export const SUBMIT_UPDATED_VALUE_STARTED = 'SUBMIT_UPDATED_VALUE_STARTED'
 export const SUBMIT_UPDATED_VALUE_FINISHED = 'SUBMIT_UPDATED_VALUE_FINISHED'
 
+export const SET_SETTINGS = 'SET_SETTINGS'
+export const CLOSE_SETTINGS = 'CLOSE_SETTINGS'
+export const SHOW_SETTINGS = 'SHOW_SETTINGS'
+
 // --------------------------------------------------------------------------------
 
 const fetchKeysStarted = {type: FETCH_KEYS_STARTED}
@@ -41,9 +41,11 @@ const fetchKeysFinished = (error, data = []) => {
   }
 }
 export const fetchKeys = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const {address, token} = getState().settings
+
     dispatch(fetchKeysStarted)
-    return axios.get(`${CONSUL_BASE_URL}/kv/?token=${CONSUL_TOKEN}&keys`)
+    return axios.get(`${address}/kv/?token=${token}&keys`)
       .then((resp) => {
         dispatch(fetchKeysFinished(null, resp.data))
       })
@@ -87,9 +89,11 @@ const submitNewKeyFinished = (error, parentKeyIndex = null, newKey = null) => {
   }
 }
 export const submitNewKey = (parentKeyIndex, newKey, newValue) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const {address, token} = getState().settings
+
     dispatch(submitNewKeyStarted)
-    return axios.put(`${CONSUL_BASE_URL}/kv/${newKey}?token=${CONSUL_TOKEN}`, newValue)
+    return axios.put(`${address}/kv/${newKey}?token=${token}`, newValue)
       .then((resp) => {
         dispatch(submitNewKeyFinished(null, parentKeyIndex, newKey))
       })
@@ -115,9 +119,11 @@ const deleteKeyFinished = (error, key) => {
   }
 }
 export const deleteKey = (key) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const {address, token} = getState().settings
+
     dispatch(deleteKeyStarted)
-    return axios.delete(`${CONSUL_BASE_URL}/kv/${key}?token=${CONSUL_TOKEN}&recurse`)
+    return axios.delete(`${address}/kv/${key}?token=${token}&recurse`)
       .then((resp) => {
         dispatch(deleteKeyFinished(null, key))
       })
@@ -149,9 +155,11 @@ const getValueFinished = (error, value = null) => {
   }
 }
 export const showUpdateKeyForm = (index, key, segmentIndex) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const {address, token} = getState().settings
+
     dispatch(getValueStarted(index, key, segmentIndex))
-    return axios.get(`${CONSUL_BASE_URL}/kv/${key}?token=${CONSUL_TOKEN}&raw`)
+    return axios.get(`${address}/kv/${key}?token=${token}&raw`)
       .then((resp) => {
         dispatch(getValueFinished(null, resp.data))
       })
@@ -175,9 +183,11 @@ const submitUpdatedValueFinished = (error) => {
   }
 }
 export const submitUpdatedValue = (key, value) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const {address, token} = getState().settings
+
     dispatch(submitUpdatedValueStarted)
-    return axios.put(`${CONSUL_BASE_URL}/kv/${key}?token=${CONSUL_TOKEN}`, value)
+    return axios.put(`${address}/kv/${key}?token=${token}`, value)
       .then((resp) => {
         dispatch(submitUpdatedValueFinished(null))
       })
@@ -190,3 +200,15 @@ export const submitUpdatedValue = (key, value) => {
       })
   }
 }
+
+// --------------------------------------------------------------------------------
+
+export const setSettings = (address, token) => {
+  return {
+    type: SET_SETTINGS,
+    address: address,
+    token: token
+  }
+}
+export const closeSettings = () => ({type: CLOSE_SETTINGS})
+export const showSettings = () => ({type: SHOW_SETTINGS})
