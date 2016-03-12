@@ -7,4 +7,4 @@ Consul host and token is currently hardcoded, needs settings page.
 
 ### Demo
 
-![Consul-UX](http://github.marconijr.com/consul-ux/consul-ux.gif)
+![Consul-UX](http://github.marconijr.com/consul-ux/consul-ux.gif?v1)
