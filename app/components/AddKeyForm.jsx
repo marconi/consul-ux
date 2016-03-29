@@ -4,7 +4,7 @@ import Radium from 'radium'
 @Radium
 class AddKeyForm extends React.Component {
   componentDidMount() {
-    this.refs.key.focus()  
+    this.refs.key.focus()
   }
 
   handleKeyChange(e) {
@@ -24,7 +24,7 @@ class AddKeyForm extends React.Component {
         <table style={[styles.table]}>
           <tbody>
 
-            {this.props.addError && 
+            {this.props.addError &&
               <tr>
                 <td style={[styles.td]} colSpan="2">
                   <span style={[styles.error]}>{this.props.addError}</span>
@@ -47,7 +47,7 @@ class AddKeyForm extends React.Component {
               </td>
             </tr>
 
-            {!this._isNestedKeys() && 
+            {!this._isNestedKeys() &&
               <tr>
                 <td style={[styles.td]} colSpan="2">
                   <textarea
