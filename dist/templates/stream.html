@@ -1,0 +1,99 @@
+<div>
+  <form>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <input type="text" placeholder="Filter keys..."
+              ng-model="keyFilter" />
+          </td>
+          <td class="add-key-td">
+            <button type="button" class="button"
+              ng-click="add()">+ Add key</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+
+<div>
+  <div class="key-row"
+    ng-repeat="key in keys | filter:keyFilter"
+    ng-init="rowIndex = $index">
+    <button class="segment"
+      tooltips tooltip-template-url="templates/segment.html"
+      ng-class="{'segment-first': $first, 'segment-last': $last}"
+      ng-repeat="segment in key"
+      ng-click="showValue(rowIndex, key, $index)">{{segment}}</button>
+
+    <form class="edit-form"
+      ng-repeat="segment in key"
+      ng-if="isEditing(rowIndex, key, $index, segment)">
+      <table>
+        <tbody>
+          <tr>
+            <td class="edit-key-td">
+              <span>{{editKey}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="edit-value-td">
+              <textarea placeholder="Value..."
+                ng-model="editValue"
+                ng-disabled="isUpdating"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="edit-actions-td">
+              <button type="button" class="button"
+                ng-click="updateKey(editKey, editValue)"
+                ng-disabled="isUpdating">Update</button>
+              <span>&nbsp;</span>
+              <button type="button" class="button button-outline"
+                ng-click="editCancel()"
+                ng-disabled="isUpdating">Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <form class="append-form"
+      ng-if="rowIndex === appendRowIndex">
+      <table>
+        <tbody>
+          <tr>
+            <td class="append-key-td">
+              <span>{{appendKeyPrefix}}/</span>
+            </td>
+            <td class="append-value-td">
+              <input type="text" placeholder="Key..."
+                ng-model="appendKey"
+                ng-disabled="isAppending"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="edit-value-td">
+              <textarea placeholder="Value..."
+                ng-model="appendValue"
+                ng-disabled="isAppending"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="edit-actions-td">
+              <button type="button" class="button"
+                ng-click="append(appendKeyPrefix, appendKey, appendValue)"
+                ng-disabled="isAppending">Create</button>
+              <span>&nbsp;</span>
+              <button type="button" class="button button-outline"
+                ng-click="appendCancel()"
+                ng-disabled="isAppending">Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+
+  </div>
+</div>

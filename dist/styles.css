@@ -1,0 +1,224 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+body {
+  padding: 20px 0px;
+}
+
+h5 {
+  text-align: center;
+}
+
+form,
+table {
+  margin: 0px !important;
+}
+
+td {
+  padding: 0px !important;
+  border: none !important;
+}
+
+.add-key-td {
+  width: 10px;
+}
+
+.add-key-td button {
+  margin-top: -5px;
+  margin-left: 10px;
+}
+
+.key-row {
+  margin-bottom: 2px;
+}
+
+.segment {
+  display: inline-block;
+  margin: 0px 2px 0px 0px;
+  padding: 2px 7px;
+  text-decoration: none;
+  color: #ffffff;
+  background: #607C76;
+  border-radius: 0px;
+  border: 0;
+  line-height: 25px;
+  height: 30px;
+  font-weight: normal;
+  font-size: 15px;
+  text-transform: none;
+}
+
+.segment:hover {
+  background: #9B4DCA;
+  color: #ffffff;
+}
+
+.segment-first {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.segment-last {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+#settings-form {
+  margin: 20px 0 !important;
+}
+
+.root-td {
+  padding: 0px !important;
+  border: none !important;
+  width: 20px;
+}
+
+.root-td span {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 16px;
+  display: inline-block;
+  height: 39px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.new-key-td {
+  padding: 0px !important;
+  border: none !important;
+}
+
+.new-key-td input {
+  display: inline-block;
+  width: 100% !important;
+  margin: 0px;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  height: 39px !important;
+  min-width: 300px;
+}
+
+.new-value-td {
+  padding: 0px;
+  border: none;
+}
+
+.new-value-td textarea {
+  margin:10px 0px 0px 0px;
+  min-height:200px;
+}
+
+.new-actions-td {
+  padding-top: 10px !important;
+  border: none !important;
+}
+
+.edit-form {
+  margin: 20px 0px 0px 0px !important;
+}
+
+.edit-key-td {
+  padding: 0px;
+  border: none;
+  width: 100%;
+}
+
+.edit-key-td span {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 16px;
+  display: inline-block;
+  height: 39px;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.edit-value-td {
+  padding: 0px;
+  border: none;
+}
+
+.edit-value-td textarea {
+  margin: 10px 0px 0px 0px;
+  min-height: 100px;
+}
+
+.edit-actions-td {
+  padding: 10px 0px !important;
+  border: none;
+}
+
+tip {
+  padding: 5px !important;
+  min-width: 0 !important;
+  width: 76px !important;
+}
+
+tip-cont {
+  height: 40px;
+  display: inline-block;
+  margin-top: -10px;
+  padding-top: 10px;
+}
+
+.segment-action-btn {
+  margin: 0px;
+  line-height: 5px;
+  height: auto;
+  padding: 10px;
+  font-size: 20px;
+  border: 0px;
+  width: 33px;
+  height: 25px;
+  float: left;
+}
+
+.segment-action-plus {
+  background-color: #21BA45;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.segment-action-minus {
+  background-color: #CC181E;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.append-form {
+  margin: 20px 0px 0px 0px !important;
+}
+
+.append-key-td {
+  padding: 0px;
+  border: none;
+  width: 20px;
+}
+
+.append-key-td span {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 16px;
+  display: inline-block;
+  height: 39px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.append-value-td input {
+  display: inline-block;
+  width: 100%;
+  margin: 0px;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  height: 39px !important;
+  min-width: 300px;
+}
